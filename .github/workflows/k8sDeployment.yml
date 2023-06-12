@@ -33,9 +33,9 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     # Container build and push to a Azure Container registry (ACR)
-    - run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+    #- run: |
+    #    docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+    #    docker push ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
     
     # Set the target Azure Kubernetes Service (AKS) cluster. 
     - uses: azure/aks-set-context@v1
@@ -70,7 +70,8 @@ jobs:
       with:
         manifests: ${{ steps.bake.outputs.manifestsBundle }}
         images: |
-          ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+          ${{ env.REGISTRY_NAME }}.azurecr.io/mongo:${{ github.sha }}
+          ${{ env.REGISTRY_NAME }}.azurecr.io/mongo-express:${{ github.sha }}
         imagepullsecrets: |
           ${{ env.REGISTRY_NAME }}-registry-connection
         namespace: ${{ env.NAMESPACE }}
