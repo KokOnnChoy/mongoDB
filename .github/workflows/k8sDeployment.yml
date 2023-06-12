@@ -58,11 +58,18 @@ jobs:
         namespace: ${{ env.NAMESPACE }}
 
     # Baking the helm chart to generate the manifests to deploy
-    - uses: azure/k8s-bake@v1
+    - uses: azure/k8s-bake@v2.4
       with:
-        renderEngine: 'helm2'
-        helmChart: './my-helm-chart/' 
-        helm-version: 'latest' 
+        renderEngine: 'helm'
+        helmChart: './aks-helloworld/'
+        arguments: |
+            --ca-file
+            ./ca-file/
+        overrideFiles: './aks-helloworld/values-override.yaml'
+        overrides: |
+            replicas:1
+        helm-version: 'latest'
+        silent: 'false' 
       id: bake
 
     # Deploy app to AKS
